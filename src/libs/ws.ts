@@ -1,4 +1,6 @@
 import ws from 'ws';
+import fs from 'fs';
+import https from 'https';
 
 import log from './winston';
 
@@ -6,9 +8,23 @@ import config from '../config';
 
 let isActiveCheck = false;
 
-const websocketConnection = new ws.Server({
-  port: config.app.websocketPort,
-});
+const wsSettings: {
+  port?: number;
+  server?: https.Server,
+} = {};
+
+if (process.env.NODE_ENV !== 'production') {
+  wsSettings.port = config.app.websocketPort;
+} else {
+  const pathToFolder = `/etc/letsencrypt/live/${config.app.url}`;
+
+  wsSettings.server = https.createServer({
+    cert: fs.readFileSync(`${pathToFolder}/fullchain.pem`, 'utf8'),
+    key: fs.readFileSync(`${pathToFolder}/privkey.pem`, 'utf8'),
+  }).listen(config.app.websocketPort);
+}
+
+const websocketConnection = new ws.Server(wsSettings);
 
 /*
 websocketConnection.on('connection', async (connection, req) => {

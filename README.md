@@ -1,2 +1,1 @@
-npm i<br>
-npm start
+A service for optimizing a doctor's work

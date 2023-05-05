@@ -15,6 +15,6 @@
 /logs
 /files
 Thumbs.db
-.env
+*.env
 atom-sftp-sync.json
 off-atom-sftp-sync.json
