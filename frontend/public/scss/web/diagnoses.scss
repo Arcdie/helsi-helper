@@ -1,0 +1,67 @@
+.page.diagnoses {
+  .search {
+    width: 100%;
+
+    input[type="text"] {
+      width: 400px;
+    }
+
+    button {
+      margin-left: 15px;
+    }
+  }
+
+  .patient-list {
+    width: 100%;
+    margin-top: 30px;
+
+    .patient {
+      display: block;
+      margin-bottom: 20px;
+
+      a.link {
+        font-size: 17px;
+      }
+
+      .diagnosis {
+        margin-top: 10px;
+
+        a {
+          margin-top: 5px;
+          color: #585f73;
+        }
+
+        .result {
+          margin-left: 5px;
+          margin-top: 10px;
+
+          span {
+            display: block;
+            margin-bottom: 5px;
+          }
+
+          div {
+            display: inline-block;
+          }
+
+          .titles {
+            span {
+              color: #63aeff;
+            }
+          }
+
+          .values {
+            margin-left: 10px;
+
+            span {}
+          }
+        }
+
+        span {
+          display: block;
+          margin-left: 3px;
+        }
+      }
+    }
+  }
+}

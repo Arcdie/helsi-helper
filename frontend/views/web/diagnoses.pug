@@ -1,0 +1,23 @@
+extends ../app
+
+block variables
+  -
+    const pageTitle = 'Аналізи та діагнози';
+
+block content
+  .page.diagnoses
+    a.back.link(href="/", title="На головну") <-
+
+    .search
+      input.input-text(type='text', placeholder='Пошук по аналізам')
+      button.button Знайти
+
+      .reload
+        img(src="/images/reload.png", alt="reload", title="Оновити")
+
+    .patient-list
+
+block scripts
+  script(src='/libs/moment.min.js')
+  script(src='/javascripts/websocket.js')
+  script(src='/javascripts/web/diagnoses.js')
