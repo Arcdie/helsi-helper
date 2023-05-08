@@ -1,5 +1,5 @@
 @ECHO OFF
 setlocal
 set NODEPATH=./
-npm run start
+git pull origin master
 pause

@@ -3,6 +3,7 @@ import { setEnvironment } from './services/app.service';
 
 setEnvironment();
 
+import { execSync } from 'child_process';
 import migrations from './migrations';
 import './libs/ws';
 import mongoDBConnector from './libs/mongodb';
@@ -16,6 +17,8 @@ import config from './config';
 
   await mongoDBConnector()
     .then(() => log.info('Connection to mongoDB is successful'));
+
+  execSync(`${process.platform === 'win32' ? 'start' : 'open'} http://${config.app.host}:${config.app.port}`);
 
   // await migrations();
 })()
