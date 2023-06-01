@@ -9,6 +9,7 @@
 .git/
 .DS_Store
 
+/dist
 /logs
 /files
 Thumbs.db
