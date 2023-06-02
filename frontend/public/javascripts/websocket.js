@@ -1,5 +1,5 @@
-const wsConnectionPort = 3100;
-const wsConnectionLink = location.host === 'localhost:3000' ? 'ws://localhost' : `wss://${location.hostname}`;
+const wsConnectionPort = 3102;
+const wsConnectionLink = location.host === 'localhost:3002' ? 'ws://localhost' : `wss://${location.hostname}`;
 
 const wsClient = new WebSocket(`${wsConnectionLink}:${wsConnectionPort}`);
 

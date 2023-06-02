@@ -19,8 +19,8 @@ if (process.env.NODE_ENV !== 'production') {
   const pathToFolder = `/etc/letsencrypt/live/${config.app.url}`;
 
   wsSettings.server = https.createServer({
-    cert: fs.readFileSync(`${pathToFolder}/fullchain.pem`, 'utf8'),
-    key: fs.readFileSync(`${pathToFolder}/privkey.pem`, 'utf8'),
+    cert: fs.readFileSync(`${pathToFolder}/fullchain.pem`),
+    key: fs.readFileSync(`${pathToFolder}/privkey.pem`),
   }).listen(config.app.websocketPort);
 }
 
