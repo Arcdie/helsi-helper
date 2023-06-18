@@ -6,6 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.initBrowser = void 0;
 const puppeteer_1 = __importDefault(require("puppeteer"));
 const initBrowser = () => puppeteer_1.default.launch({
-    headless: true,
+    headless: false,
 });
 exports.initBrowser = initBrowser;
