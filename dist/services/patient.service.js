@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkNewPatients = void 0;
+exports.checkNewPatients = exports.findManyByIds = void 0;
 const winston_1 = __importDefault(require("../libs/winston"));
 const helper_1 = require("../libs/helper");
 const axios_1 = require("../libs/axios");
@@ -92,6 +92,10 @@ const getPatientsFromHelsi = async (cookie, page, patients = [], wasHandledGetti
         }
     }
 };
+const findManyByIds = (patientIds) => {
+    return patientRepository.findManyByIds(patientIds);
+};
+exports.findManyByIds = findManyByIds;
 const checkNewPatients = async () => {
     const checkFlag = (0, ws_1.getCheckFlag)();
     if (checkFlag) {

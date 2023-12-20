@@ -31,7 +31,6 @@ const winston_1 = __importDefault(require("../libs/winston"));
 const helper_1 = require("../libs/helper");
 const axios_1 = require("../libs/axios");
 const ws_1 = require("../libs/ws");
-const patientRepository = __importStar(require("../repositories/patient.repository"));
 const diagnosisRepository = __importStar(require("../repositories/diagnosis.repository"));
 const auth_service_1 = require("./auth.service");
 const getDiagnosesUrl = (patientId, page) => `https://helsi.pro/api/patients/${patientId}/diagnosticReports?limit=50&page=${page}&skip=${50 * (page - 1)}`;
@@ -88,27 +87,14 @@ const getDiagnosesFromHelsi = async (patientId, cookie, page, diagnoses = [], wa
     }
 };
 const findManyByName = async (name) => {
-    const diagnoses = await diagnosisRepository.findManyByName(name, {
+    return diagnosisRepository.findManyByName(name, {
         patientId: true,
         id: true,
         name: true,
         conclusion: true,
         diagnosticResult: true,
+        createdAt: true,
     });
-    if (!diagnoses.length) {
-        return [];
-    }
-    const patientIds = diagnoses.map(e => e.patientId);
-    const patients = await patientRepository.findManyByIds(patientIds, {
-        firstName: true,
-        middleName: true,
-        lastName: true,
-        patientId: true,
-    });
-    return diagnoses.map(d => ({
-        ...d._doc,
-        patient: patients.find(p => p._id.toString() === d.patientId.toString()),
-    }));
 };
 exports.findManyByName = findManyByName;
 const checkNewDiagnoses = async (patients) => {

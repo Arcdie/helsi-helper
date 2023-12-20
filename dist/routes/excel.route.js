@@ -23,25 +23,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkNewEpisodes = exports.findEpisodesByName = void 0;
-const episodeService = __importStar(require("../services/episode.service"));
-const patientRepository = __importStar(require("../repositories/patient.repository"));
-const expressResponses_1 = require("../libs/expressResponses");
-const findEpisodesByName = async (req, res) => {
-    const { name } = req.body;
-    if (!name) {
-        return (0, expressResponses_1.badRequestResponse)(res, 'No name in body');
-    }
-    const results = await episodeService.findManyByName(name);
-    return (0, expressResponses_1.successResponse)(res, results);
-};
-exports.findEpisodesByName = findEpisodesByName;
-const checkNewEpisodes = async (req, res) => {
-    const existPatients = await patientRepository.findManyBy({});
-    if (!existPatients.length) {
-        return (0, expressResponses_1.successResponse)(res, { status: true });
-    }
-    const result = await episodeService.checkNewEpisodes(existPatients);
-    return (0, expressResponses_1.successResponse)(res, result);
-};
-exports.checkNewEpisodes = checkNewEpisodes;
+const express_1 = require("express");
+const excelController = __importStar(require("../controllers/excel.controller"));
+const router = (0, express_1.Router)();
+router.post('/', excelController.createExelFile);
+exports.default = router;

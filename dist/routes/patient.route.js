@@ -27,5 +27,6 @@ const express_1 = require("express");
 const patientController = __importStar(require("../controllers/patient.controller"));
 const router = (0, express_1.Router)();
 router.get('/', patientController.getPatients);
+router.get('/extended', patientController.getPatientsExtended);
 router.get('/check', patientController.checkNewPatients);
 exports.default = router;

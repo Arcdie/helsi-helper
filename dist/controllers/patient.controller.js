@@ -23,19 +23,20 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkNewPatients = exports.getPatients = exports.getPatientsPage = void 0;
+exports.checkNewPatients = exports.getPatientsExtended = exports.getPatients = void 0;
 const expressResponses_1 = require("../libs/expressResponses");
 const patientService = __importStar(require("../services/patient.service"));
 const patientRepository = __importStar(require("../repositories/patient.repository"));
-const getPatientsPage = (req, res) => {
-    res.render('web/patients');
-};
-exports.getPatientsPage = getPatientsPage;
 const getPatients = async (req, res) => {
     const patients = await patientRepository.findManyBy({}, { _id: true });
     return (0, expressResponses_1.successResponse)(res, patients);
 };
 exports.getPatients = getPatients;
+const getPatientsExtended = async (req, res) => {
+    const patients = await patientRepository.findManyBy({});
+    return (0, expressResponses_1.successResponse)(res, patients);
+};
+exports.getPatientsExtended = getPatientsExtended;
 const checkNewPatients = async (req, res) => {
     const result = await patientService.checkNewPatients();
     (0, expressResponses_1.successResponse)(res, result);

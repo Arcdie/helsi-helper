@@ -25,12 +25,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const webController = __importStar(require("../controllers/web.controller"));
-const patientController = __importStar(require("../controllers/patient.controller"));
-const episodeController = __importStar(require("../controllers/episode.controller"));
-const diagnosisController = __importStar(require("../controllers/diagnosis.controller"));
 const router = (0, express_1.Router)();
 router.get('/', webController.getIndexPage);
-router.get('/patients', patientController.getPatientsPage);
-router.get('/episodes', episodeController.getEpisodesPage);
-router.get('/diagnoses', diagnosisController.getDiagnosesPage);
+router.get('/report', webController.getReportPage);
+router.get('/patients', webController.getPatientsPage);
+router.get('/episodes', webController.getEpisodesPage);
+router.get('/diagnoses', webController.getDiagnosesPage);
 exports.default = router;

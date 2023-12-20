@@ -26,6 +26,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const diagnosisController = __importStar(require("../controllers/diagnosis.controller"));
 const router = (0, express_1.Router)();
-router.post('/byName', diagnosisController.findManyByName);
+router.post('/byNames', diagnosisController.findManyByNames);
 router.get('/check', diagnosisController.checkNewDiagnoses);
 exports.default = router;
