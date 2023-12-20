@@ -6,7 +6,7 @@ import { getCheckFlag, changeCheckFlag, sendMessage } from '../libs/ws';
 import { getCookie } from './auth.service';
 import * as patientRepository from '../repositories/patient.repository';
 
-import { IPatient } from '../interfaces/IPatient';
+import { IPatient, IPatientModel } from '../interfaces/IPatient';
 import { IGetPatientsResponse } from '../interfaces/responses/IGetPatientsResponse';
 
 const getPatientsUrl = (skip: number = 0) => `https://helsi.pro/api/resources/ob_255/patients?dgd=&dld=&g=&limit=50&pebd=&pgbd=&plbd=&qn=&qp=&s=&skip=${skip}`;
@@ -98,13 +98,12 @@ export const checkNewPatients = async () => {
   const existPatients = await patientRepository.findManyBy({});
   const helsiPatients = await getPatientsFromHelsi(cookie, 0);
 
+  const returnData: IPatientModel[] = [];
   const newPatients = helsiPatients.filter(p => !existPatients.some(eP => eP.patientId === p.patientId));
 
   if (newPatients.length) {
-    return {
-      status: true,
-      data: await patientRepository.createMany(newPatients),
-    };
+    const result = await patientRepository.createMany(newPatients);
+    returnData.push(...result);
   }
 
   changeCheckFlag(false);
@@ -119,6 +118,6 @@ export const checkNewPatients = async () => {
 
   return {
     status: true,
-    data: [],
+    data: returnData,
   };
 };

@@ -1,1 +1,1 @@
-A service for optimizing a doctor's work
+A service for optimizing doctor's weekdays
