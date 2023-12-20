@@ -9,7 +9,8 @@ import * as patientRepository from '../repositories/patient.repository';
 import { IPatient, IPatientModel } from '../interfaces/IPatient';
 import { IGetPatientsResponse } from '../interfaces/responses/IGetPatientsResponse';
 
-const getPatientsUrl = (skip: number = 0) => `https://helsi.pro/api/resources/ob_255/patients?dgd=&dld=&g=&limit=50&pebd=&pgbd=&plbd=&qn=&qp=&s=&skip=${skip}`;
+const getPatientsUrl = (skip: number = 0) =>
+  `https://helsi.pro/api/resources/ob_255/patients?dgd=&dld=&g=&limit=50&pebd=&pgbd=&plbd=&qn=&qp=&s=&skip=${skip}`;
 
 const getPatientsFromHelsi = async (
   cookie: string,
@@ -81,6 +82,10 @@ const getPatientsFromHelsi = async (
     }
   }
 };
+
+export const findManyByIds = (patientIds: string[]) => {
+  return patientRepository.findManyByIds(patientIds);
+}
 
 export const checkNewPatients = async () => {
   const checkFlag = getCheckFlag();

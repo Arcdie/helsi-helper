@@ -1,30 +1,39 @@
 import { Request, Response } from 'express';
 
+import { getUniqueArray } from '../libs/helper';
+
+import * as patientService from '../services/patient.service';
 import * as diagnosisService from '../services/diagnosis.service';
 
 import * as patientRepository from '../repositories/patient.repository';
 
 import { badRequestResponse, successResponse } from '../libs/expressResponses';
 
-export const getDiagnosesPage = (req: Request, res: Response) => {
-  res.render('web/diagnoses');
-};
-
-export const findManyByName = async (req: Request, res: Response) => {
+export const findManyByNames = async (req: Request, res: Response) => {
   const { names }: { names: string } = req.body;
 
   if (!names) {
     return badRequestResponse(res, 'No names in body');
   }
 
-  const results = (await Promise.all(names.split(',').map(async name => {
-    return diagnosisService.findManyByName(name.trim());
-  }))).flat();
+  const diagnoses = (
+    await Promise.all(
+      names
+        .split(',')
+        .map(name => diagnosisService.findManyByName(name.trim()),
+      )
+    )
+  ).flat();
 
-  const uniquePatientIds = [...new Set(results.map(r => r.patientId.toString()))];
-  const returnData = uniquePatientIds.map(patientId => ({
-    patient: results.find(r => r.patientId.toString() === patientId)?.patient,
-    diagnoses: results.filter(r => r.patientId.toString() === patientId),
+  const patientIds = getUniqueArray(
+    diagnoses.map(e => e.patientId.toString()),
+  );
+  
+  const patients = await patientService.findManyByIds(patientIds);
+
+  const returnData = patients.map((patient) => ({
+    patient: patient._doc,
+    diagnoses: diagnoses.filter((d) => d.patientId.toString() === patient._id.toString()),
   }));
 
   return successResponse(res, returnData);

@@ -9,7 +9,7 @@ const createMany = async (patients: IPatient[]) => Patient.insertMany(patients);
 const findManyBy = async (filterOptions: any = {}, selectOptions: any = {}) =>
   Patient.find(filterOptions, selectOptions).exec();
 
-const findManyByIds = async (ids: Types.ObjectId[], selectOptions: any = {}) =>
+const findManyByIds = async (ids: string[], selectOptions: any = {}) =>
   Patient.find({ _id: { $in: ids } }, selectOptions).exec();
 
 export {

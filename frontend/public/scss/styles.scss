@@ -1,10 +1,11 @@
 // Includes
 
-@import './includes/reset.scss';
+// @import './includes/reset.scss';
 @import './includes/default.scss';
 
 // Web
 @import './web/index.scss';
+@import './web/report.scss';
 @import './web/patients.scss';
 @import './web/episodes.scss';
 @import './web/diagnoses.scss';

@@ -86,7 +86,7 @@ export const findManyByName = async (name: string) => {
     return [];
   }
 
-  const patientIds = episodes.map(e => e.patientId);
+  const patientIds = episodes.map(e => e.patientId.toString());
   const patients = await patientRepository.findManyByIds(patientIds, {
     firstName: true,
     middleName: true,

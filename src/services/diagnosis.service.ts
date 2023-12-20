@@ -3,7 +3,6 @@ import { sleep } from '../libs/helper';
 import { makeRequest } from '../libs/axios';
 import { getCheckFlag, changeCheckFlag, sendMessage } from '../libs/ws';
 
-import * as patientRepository from '../repositories/patient.repository';
 import * as diagnosisRepository from '../repositories/diagnosis.repository';
 
 import { IDiagnosis } from '../interfaces/IDiagnosis';
@@ -11,7 +10,8 @@ import { IPatientModel } from '../interfaces/IPatient';
 import { IGetDiagnosesResponse } from '../interfaces/responses/IGetDiagnosesResponse';
 import { getCookie } from './auth.service';
 
-const getDiagnosesUrl = (patientId: string, page: number) => `https://helsi.pro/api/patients/${patientId}/diagnosticReports?limit=50&page=${page}&skip=${50 * (page - 1)}`;
+const getDiagnosesUrl = (patientId: string, page: number) =>
+  `https://helsi.pro/api/patients/${patientId}/diagnosticReports?limit=50&page=${page}&skip=${50 * (page - 1)}`;
 
 const getDiagnosesFromHelsi = async (
   patientId: string,
@@ -79,30 +79,14 @@ const getDiagnosesFromHelsi = async (
 };
 
 export const findManyByName = async (name: string) => {
-  const diagnoses = await diagnosisRepository.findManyByName(name, {
+  return diagnosisRepository.findManyByName(name, {
     patientId: true,
     id: true,
     name: true,
     conclusion: true,
     diagnosticResult: true,
+    createdAt: true,
   });
-
-  if (!diagnoses.length) {
-    return [];
-  }
-
-  const patientIds = diagnoses.map(e => e.patientId);
-  const patients = await patientRepository.findManyByIds(patientIds, {
-    firstName: true,
-    middleName: true,
-    lastName: true,
-    patientId: true,
-  });
-
-  return diagnoses.map(d => ({
-    ...d._doc,
-    patient: patients.find(p => p._id.toString() === d.patientId.toString()),
-  }));
 };
 
 export const checkNewDiagnoses = async (patients: IPatientModel[]) => {

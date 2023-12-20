@@ -1,0 +1,36 @@
+extends ../app
+
+block variables
+  -
+    const pageTitle = 'Звiт';
+
+block content
+  .page.report
+  
+    nav
+      a.back.btn.btn-dark(href='/', title='На головну') <
+
+      .excel
+        img(src="/images/excel.png", alt="excel")
+
+    table#report.table.table-bordered
+      thead
+        tr
+          th №
+          th.text-start ПIБ
+          th Дата народждення
+          th Телефон
+          th ПСА, Уролог
+          th Прихована кров, проктолог
+          th Мамографiя
+          th Денситометрія
+          th Холестерин
+          th Глюкоза
+          th УЗД молочної залози
+          th Гiнеколог
+
+      tbody
+
+block scripts
+  script(src='/libs/moment.min.js')
+  script(src='/javascripts/web/report.js')

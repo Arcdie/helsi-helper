@@ -4,7 +4,7 @@ import * as diagnosisController from '../controllers/diagnosis.controller';
 
 const router = Router();
 
-router.post('/byName', diagnosisController.findManyByName);
+router.post('/byNames', diagnosisController.findManyByNames);
 
 router.get('/check', diagnosisController.checkNewDiagnoses);
 

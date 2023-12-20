@@ -1,0 +1,40 @@
+.page.report {
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    .excel {
+      width: 33px;
+      cursor: pointer;
+      margin-right: 7px;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+
+  table {
+    margin-top: 10px;
+
+    tr {
+      th, td {
+        text-align: center;
+      }
+
+      td {
+        padding: 10px;
+
+        a {
+          display: block;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+}

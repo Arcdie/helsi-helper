@@ -6,7 +6,7 @@ objects, moment,
 /* Constants */
 
 const URL_CHECK_DIAGNOSES = '/api/diagnoses/check';
-const URL_GET_DIAGNOSES_BY_NAME = '/api/diagnoses/byName';
+const URL_GET_DIAGNOSES_BY_NAMES = '/api/diagnoses/byNames';
 
 /* Variables *
 
@@ -58,7 +58,7 @@ $(document).ready(async () => {
         return true;
       }
 
-      const diagnoses = await getDiagnosesByName(value);
+      const diagnoses = await getDiagnosesByNames(value);
 
       $patientList.empty();
 
@@ -74,7 +74,7 @@ $(document).ready(async () => {
 
           if (e.diagnoses && e.diagnoses.length) {
             e.diagnoses.forEach(d => {
-              const validDate = moment(d.effectiveDateTime).format('DD.MM.YY HH:mm');
+              const validDate = moment(d.createdAt).format('DD.MM.YY HH:mm');
 
               diagnosesStr += `<div class="diagnosis">
                 <a href="https://helsi.pro/emk/page/${e.patient.patientId}/diagnosticReports/view/${d.id}" target="_blank">${d.name} (${validDate})</a>
@@ -103,10 +103,10 @@ $(document).ready(async () => {
     });
 });
 
-const getDiagnosesByName = async (names) => {
+const getDiagnosesByNames = async (names) => {
   const response = await makeRequest({
     method: 'POST',
-    url: URL_GET_DIAGNOSES_BY_NAME,
+    url: URL_GET_DIAGNOSES_BY_NAMES,
     body: { names },
   });
 

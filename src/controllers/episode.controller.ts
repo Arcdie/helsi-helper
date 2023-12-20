@@ -6,10 +6,6 @@ import * as patientRepository from '../repositories/patient.repository';
 
 import { badRequestResponse, successResponse } from '../libs/expressResponses';
 
-export const getEpisodesPage = (req: Request, res: Response) => {
-  res.render('web/episodes');
-};
-
 export const findEpisodesByName = async (req: Request, res: Response) => {
   const { name }: { name: string } = req.body;
 
