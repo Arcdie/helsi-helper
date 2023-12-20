@@ -18,9 +18,7 @@ import config from './config';
   await mongoDBConnector()
     .then(() => log.info('Connection to mongoDB is successful'));
 
-  if (process.env.NODE_ENV === 'production') {
-    execSync(`${process.platform === 'win32' ? 'start' : 'open'} http://${config.app.host}:${config.app.port}`);
-  }
+  execSync(`${process.platform === 'win32' ? 'start' : 'open'} http://${config.app.host}:${config.app.port}`);
 
   // await migrations();
 })()
