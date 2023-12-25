@@ -5,49 +5,22 @@ objects,
 
 /* Constants */
 
+const URL_GET_EPISODES = '/api/episodes';
 const URL_CREATE_EXCEL_FILE = '/api/excel';
-const URL_GET_PATIENTS_EXTENDED = '/api/patients/extended';
-const URL_GET_DIAGNOSES_BY_NAMES = '/api/diagnoses/byNames';
 
 /* Variables */
-
-const diagnosisNames = [
-  'ПСА',
-  'Прихована кров',
-  'Рентгенографія молочної залози',
-  'Денситометрія',
-  'Холестерин',
-  'Глюкоза',
-  'Ультразвукове дослідження молочної залози',
-  'Гінекологічне обстеження'
-].map((e) => e.toLowerCase());
 
 /* JQuery */
 const $excel = $('.excel');
 const $report = $('table#report');
 
 $(document).ready(async () => {
-  const patients = [];
-  const data = await getDiagnosesByNames(diagnosisNames.join(','));
+  const data = await getEpisodes();
+  $('#loading').remove();
 
   if (data.length) {
-    data.forEach(({ patient, diagnoses }) => {
-      let currentPatient = patients.find((p) => p._id === patient._id);
-
-      if (!currentPatient) {
-        currentPatient = {
-          ...patient,
-          diagnoses: [],
-        }
-
-        patients.push(currentPatient);
-      }
-
-      currentPatient.diagnoses.push(...diagnoses);
-    });
+    updateTable(data);
   }
-
-  updateTable(patients);
 
   $excel
     .on('click', async () => {
@@ -57,6 +30,8 @@ $(document).ready(async () => {
       $report.find('th').each((i, e) => {
         tableHeaders.push($(e).text());
       });
+
+      tableHeaders.push('Примiтки');
 
       $report.find('tbody tr').each((i, tr) => {
         const $tr = $(tr);
@@ -80,6 +55,7 @@ $(document).ready(async () => {
           }
         });
 
+        raw.push('');
         tableBody.push(raw);
       });
 
@@ -88,36 +64,16 @@ $(document).ready(async () => {
     });
 });
 
-const updateTable = (patients) => {
+const updateTable = (data) => {
   let appendStr = '';
 
-  const showDiagnoses = (arr) => {
+  const showEpisodes = (arr) => {
     return (!arr || !arr.length) ? '' : arr.join('');
   };
 
-  patients.forEach((patient, index) => {
+  data.forEach(({ patient, episodes }, index) => {
     const birthday = getPrettyDate(patient.birthDate);
     const fullName = `${patient.lastName || ''} ${patient.firstName || ''} ${patient.middleName || ''}`
-
-    const dates = Object.fromEntries(
-      diagnosisNames.map((e) => [e, []]),
-    );
-
-    if (patient.diagnoses) {
-      patient.diagnoses.forEach((d) => {
-        diagnosisNames.forEach((n) => {
-          if (d.name.toLowerCase().includes(n)) {
-            dates[n].push(`
-              <a
-                title="${d.name}"
-                target="_blank"
-                href="https://helsi.pro/emk/page/${patient.patientId}/diagnosticReports/view/${d.id}"
-              >${getPrettyDate(d.createdAt)}</a>
-            `);
-          }
-        });
-      });
-    }
 
     appendStr += `<tr>
       <td class="text-center">${index + 1}</td>
@@ -126,15 +82,48 @@ const updateTable = (patients) => {
       </td>
       <td>${birthday}</td>
       <td class="text-center">${patient.phone}</td>
-      <td>${showDiagnoses(dates[diagnosisNames[0]])}</td>
-      <td>${showDiagnoses(dates[diagnosisNames[1]])}</td>
-      <td>${showDiagnoses(dates[diagnosisNames[2]])}</td>
-      <td>${showDiagnoses(dates[diagnosisNames[3]])}</td>
-      <td>${showDiagnoses(dates[diagnosisNames[4]])}</td>
-      <td>${showDiagnoses(dates[diagnosisNames[5]])}</td>
-      <td>${showDiagnoses(dates[diagnosisNames[6]])}</td>
-      <td>${showDiagnoses(dates[diagnosisNames[7]])}</td>
+      <td class="${patient.sex ? 'male' : 'female'}">${patient.sex ? 'Чоловiк' : 'Жiнка'}</td>
+
+      <td>
+        <a
+          target="_blank"
+          href="https://helsi.pro/emk/page/${patient.patientId}/episode/${episodes[0].id}/receptions"
+        >${getPrettyDate(episodes[0].createdAt)}</a>
+      </td>
+
+      <td>
+        <a
+          target="_blank"
+          href="https://helsi.pro/emk/page/${patient.patientId}/episode/${episodes[0].id}/receptions"
+        >${episodes[0].name}</a>
+      </td>
     </tr>`;
+
+    episodes.forEach((e, index) => {
+      if (index === 0) return;
+
+      appendStr += `<tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="${patient.sex ? 'male' : 'female'}"></td>
+
+        <td>
+          <a
+            target="_blank"
+            href="https://helsi.pro/emk/page/${patient.patientId}/episode/${e.id}/receptions"
+          >${getPrettyDate(e.createdAt)}</a>
+        </td>
+
+        <td>
+          <a
+            target="_blank"
+            href="https://helsi.pro/emk/page/${patient.patientId}/episode/${e.id}/receptions"
+          >${e.name}</a>
+        </td>
+      </tr>`;
+    });
   });
 
   $report.find('tbody').append(appendStr);
@@ -144,29 +133,14 @@ const getPrettyDate = (date) => {
   return moment(date).format('DD.MM.YYYY');
 };
 
-const getPatientsExtended = async (name) => {
+const getEpisodes = async () => {
   const response = await makeRequest({
     method: 'GET',
-    url: URL_GET_PATIENTS_EXTENDED,
+    url: URL_GET_EPISODES,
   });
 
   if (!response) {
-    alert('Can not get patients');
-    return false;
-  }
-
-  return response;
-};
-
-const getDiagnosesByNames = async (names) => {
-  const response = await makeRequest({
-    method: 'POST',
-    url: URL_GET_DIAGNOSES_BY_NAMES,
-    body: { names },
-  });
-
-  if (!response) {
-    alert('Can not get diagnoses');
+    alert('Can not get episodes');
     return false;
   }
 

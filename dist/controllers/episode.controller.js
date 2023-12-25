@@ -23,8 +23,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkNewEpisodes = exports.findEpisodesByName = void 0;
+exports.checkNewEpisodes = exports.findAll = exports.findEpisodesByName = void 0;
+const helper_1 = require("../libs/helper");
 const episodeService = __importStar(require("../services/episode.service"));
+const episodeRepository = __importStar(require("../repositories/episode.repository"));
 const patientRepository = __importStar(require("../repositories/patient.repository"));
 const expressResponses_1 = require("../libs/expressResponses");
 const findEpisodesByName = async (req, res) => {
@@ -32,10 +34,44 @@ const findEpisodesByName = async (req, res) => {
     if (!name) {
         return (0, expressResponses_1.badRequestResponse)(res, 'No name in body');
     }
-    const results = await episodeService.findManyByName(name);
-    return (0, expressResponses_1.successResponse)(res, results);
+    const episodes = await episodeService.findManyByName(name);
+    const patientIds = episodes.map(e => e.patientId.toString());
+    const patients = await patientRepository.findManyByIds(patientIds, {
+        firstName: true,
+        middleName: true,
+        lastName: true,
+        patientId: true,
+    });
+    return (0, expressResponses_1.successResponse)(res, episodes.map(e => ({
+        ...e._doc,
+        patient: patients.find(p => p._id.toString() === e.patientId.toString()),
+    })));
 };
 exports.findEpisodesByName = findEpisodesByName;
+const findAll = async (req, res) => {
+    const episodes = await episodeRepository.findMany({}, {
+        id: true,
+        name: true,
+        patientId: true,
+        createdAt: true,
+    });
+    const patientIds = (0, helper_1.getUniqueArray)(episodes.map(e => e.patientId.toString()));
+    const patients = await patientRepository.findManyByIds(patientIds, {
+        patientId: true,
+        birthDate: true,
+        firstName: true,
+        lastName: true,
+        middleName: true,
+        phone: true,
+        sex: true,
+    });
+    const returnData = patients.map((patient) => ({
+        patient: patient._doc,
+        episodes: episodes.filter((d) => d.patientId.toString() === patient._id.toString()),
+    }));
+    return (0, expressResponses_1.successResponse)(res, returnData);
+};
+exports.findAll = findAll;
 const checkNewEpisodes = async (req, res) => {
     const existPatients = await patientRepository.findManyBy({});
     if (!existPatients.length) {

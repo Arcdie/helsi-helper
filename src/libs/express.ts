@@ -23,7 +23,11 @@ const useMiddlewares = (expressApp: Express) => {
   expressApp.set('views', `${frontFolder}/views`);
   expressApp.set('view engine', 'pug');
 
-  expressApp.use(bodyParser.json({}));
+  expressApp.use(bodyParser.json({
+    limit: '1000mb'
+  }));
+
+  expressApp.use(bodyParser.urlencoded({ extended: false }));
   expressApp.use(bodyParser.urlencoded({ extended: false }));
 
   expressApp.use(express.static(`${frontFolder}/public`));

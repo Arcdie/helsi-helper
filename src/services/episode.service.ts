@@ -76,28 +76,12 @@ const getEpisodesFromHelsi = async (
 };
 
 export const findManyByName = async (name: string) => {
-  const episodes = await episodeRepository.findManyByName(name, {
+  return episodeRepository.findManyByName(name, {
     id: true,
     name: true,
     patientId: true,
+    createdAt: true,
   });
-
-  if (!episodes.length) {
-    return [];
-  }
-
-  const patientIds = episodes.map(e => e.patientId.toString());
-  const patients = await patientRepository.findManyByIds(patientIds, {
-    firstName: true,
-    middleName: true,
-    lastName: true,
-    patientId: true,
-  });
-
-  return episodes.map(e => ({
-    ...e._doc,
-    patient: patients.find(p => p._id.toString() === e.patientId.toString()),
-  }));
 };
 
 export const checkNewEpisodes = async (patients: IPatientModel[]) => {

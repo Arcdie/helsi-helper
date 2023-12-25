@@ -16,6 +16,11 @@ export const getEpisodesPage = (req: Request, res: Response) => {
   res.render('web/episodes');
 };
 
-export const getReportPage = (req: Request, res: Response) => {
-  res.render('web/report');
+
+export const getReportEpisodesPage = (req: Request, res: Response) => {
+  res.render('web/report-episodes');
+};
+
+export const getReportDiagnosesPage = (req: Request, res: Response) => {
+  res.render('web/report-diagnoses');
 };

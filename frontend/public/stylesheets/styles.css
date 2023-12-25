@@ -51,9 +51,16 @@
     align-items: center;
     background-color: white; }
 
-.page.index a {
-  font-size: 25px;
-  margin-right: 10px; }
+.page.index {
+  display: flex;
+  justify-content: space-between; }
+  .page.index a {
+    font-size: 25px;
+    margin-right: 10px; }
+
+.page.report #loading {
+  font-size: 20px;
+  text-align: center; }
 
 .page.report nav {
   display: flex;
@@ -77,6 +84,10 @@
       text-decoration: none; }
       .page.report table tr td a:hover {
         text-decoration: underline; }
+    .page.report table tr td.male {
+      background-color: #DCEBFF; }
+    .page.report table tr td.female {
+      background-color: #FFF0F0; }
 
 .page.patients .patient-list .result {
   margin-left: 5px;

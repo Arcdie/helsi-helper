@@ -20,7 +20,10 @@ const useMiddlewares = (expressApp) => {
     const frontFolder = path_1.default.join(__dirname, '../../frontend');
     expressApp.set('views', `${frontFolder}/views`);
     expressApp.set('view engine', 'pug');
-    expressApp.use(body_parser_1.default.json({}));
+    expressApp.use(body_parser_1.default.json({
+        limit: '1000mb'
+    }));
+    expressApp.use(body_parser_1.default.urlencoded({ extended: false }));
     expressApp.use(body_parser_1.default.urlencoded({ extended: false }));
     expressApp.use(express_1.default.static(`${frontFolder}/public`));
     if (!['production', 'test'].includes((0, helper_1.getEnv)())) {

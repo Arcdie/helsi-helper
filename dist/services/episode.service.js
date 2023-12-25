@@ -32,7 +32,6 @@ const helper_1 = require("../libs/helper");
 const axios_1 = require("../libs/axios");
 const ws_1 = require("../libs/ws");
 const auth_service_1 = require("./auth.service");
-const patientRepository = __importStar(require("../repositories/patient.repository"));
 const episodeRepository = __importStar(require("../repositories/episode.repository"));
 const getEpisodesUrl = (patientId, skip = 0) => `https://helsi.pro/api/patients/${patientId}/episodes?code=&limit=50&skip=${skip}&status=`;
 const getEpisodesFromHelsi = async (patientId, cookie, page, episodes = [], wasHandledGettingCookie = false) => {
@@ -85,25 +84,12 @@ const getEpisodesFromHelsi = async (patientId, cookie, page, episodes = [], wasH
     }
 };
 const findManyByName = async (name) => {
-    const episodes = await episodeRepository.findManyByName(name, {
+    return episodeRepository.findManyByName(name, {
         id: true,
         name: true,
         patientId: true,
+        createdAt: true,
     });
-    if (!episodes.length) {
-        return [];
-    }
-    const patientIds = episodes.map(e => e.patientId.toString());
-    const patients = await patientRepository.findManyByIds(patientIds, {
-        firstName: true,
-        middleName: true,
-        lastName: true,
-        patientId: true,
-    });
-    return episodes.map(e => ({
-        ...e._doc,
-        patient: patients.find(p => p._id.toString() === e.patientId.toString()),
-    }));
 };
 exports.findManyByName = findManyByName;
 const checkNewEpisodes = async (patients) => {

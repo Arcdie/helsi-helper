@@ -7,7 +7,13 @@ exports.findManyByName = exports.findMany = exports.createMany = void 0;
 const episode_model_1 = __importDefault(require("../models/episode.model"));
 const createMany = async (patient, episodes) => episode_model_1.default.insertMany(episodes.map(e => ({ ...e, patientId: patient._id })));
 exports.createMany = createMany;
-const findMany = async (filterOptions = {}) => episode_model_1.default.find({ ...filterOptions }).exec();
+const findMany = async (filterOptions = {}, selectOptions = {}) => {
+    const query = episode_model_1.default.find({ ...filterOptions });
+    if (Object.keys(selectOptions).length) {
+        query.select(selectOptions);
+    }
+    return query.exec();
+};
 exports.findMany = findMany;
 const findManyByName = async (name, selectOptions = {}) => episode_model_1.default.find({
     name: { $regex: name, $options: 'i' },

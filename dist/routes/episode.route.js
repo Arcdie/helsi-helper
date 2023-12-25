@@ -26,6 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const episodeController = __importStar(require("../controllers/episode.controller"));
 const router = (0, express_1.Router)();
+router.get('/', episodeController.findAll);
 router.post('/byName', episodeController.findEpisodesByName);
 router.get('/check', episodeController.checkNewEpisodes);
 exports.default = router;

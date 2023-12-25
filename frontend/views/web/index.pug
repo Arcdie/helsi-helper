@@ -6,9 +6,13 @@ block variables
 
 block content
   .page.index.bg-secondary.bg-gradient
-    a.btn.btn-light(href='/patients') Пацієнти
-    a.btn.btn-light(href='/episodes') Епізоди
-    a.btn.btn-light(href='/diagnoses') Аналізи
-    a.btn.btn-light(href='/report') Звiт
+    div
+      a.btn.btn-light(href='/patients') Пацієнти
+      a.btn.btn-light(href='/episodes') Епізоди
+      a.btn.btn-light(href='/diagnoses') Аналізи
+
+    div
+      a.btn.btn-light(href='/reports/diagnoses') Звiт (Аналізи)
+      a.btn.btn-light(href='/reports/episodes') Звiт (Дiагнози)
 
 block scripts

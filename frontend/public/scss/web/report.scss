@@ -1,4 +1,9 @@
 .page.report {
+  #loading {
+    font-size: 20px;
+    text-align: center;
+  }
+
   nav {
     display: flex;
     justify-content: space-between;
@@ -33,6 +38,14 @@
           &:hover {
             text-decoration: underline;
           }
+        }
+
+        &.male {
+          background-color: #DCEBFF;
+        }
+  
+        &.female {
+          background-color:#FFF0F0;
         }
       }
     }
